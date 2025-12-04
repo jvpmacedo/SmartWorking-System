@@ -1,74 +1,183 @@
+// Arquivo: SmartWorkingSystem.java
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 public class SmartWorkingSystem {
 
-    // Simulação de Banco de Dados em Memória
+    // Agora a lista aceita qualquer classe que herde de Usuario (Polimorfismo)
     private static List<Usuario> usuariosBD = new ArrayList<>();
     private static List<Espaco> espacosBD = new ArrayList<>();
     private static List<Reserva> reservasBD = new ArrayList<>();
-
+    
     private static Usuario usuarioLogado = null;
 
     public static void main(String[] args) {
-        inicializarDados(); // Popula o sistema com dados de teste
+        inicializarDados(); 
         Scanner scanner = new Scanner(System.in);
-
+        
         System.out.println("=== SISTEMA SMARTWORKING ===");
 
         while (true) {
             if (usuarioLogado == null) {
-                exibirMenuLogin(scanner);
+                System.out.println("\n--- TELA INICIAL ---");
+                System.out.println("1. Fazer Login");
+                System.out.println("2. Cadastrar-se");
+                System.out.println("0. Sair");
+                System.out.print("Escolha: ");
+                String opcao = scanner.nextLine();
+
+                switch (opcao) {
+                    case "1": exibirMenuLogin(scanner); break;
+                    case "2": fluxoCadastro(scanner); break; // Novo fluxo
+                    case "0": return;
+                    default: System.out.println("Opção inválida.");
+                }
             } else {
                 exibirMenuPrincipal(scanner);
             }
         }
     }
+
+    // --- CADASTRO INTELIGENTE (ATUALIZADO) ---
+    private static void fluxoCadastro(Scanner scanner) {
+        System.out.println("\n--- TIPO DE CADASTRO ---");
+        System.out.println("1. Membro (Quero alugar espaços)");
+        System.out.println("2. Administrador (Sou dono de um espaço)");
+        System.out.print("Escolha: ");
+        String tipo = scanner.nextLine();
+
+        // Dados Comuns a todos
+        System.out.print("Nome Completo: ");
+        String nome = scanner.nextLine();
+        
+        System.out.print("E-mail (Login): ");
+        String email = scanner.nextLine();
+
+        // Validação de E-mail Único (RN01)
+        for (Usuario u : usuariosBD) {
+            if (u.getEmail().equalsIgnoreCase(email)) {
+                System.out.println("ERRO: Este e-mail já está em uso!");
+                return;
+            }
+        }
+
+        System.out.print("Senha: ");
+        String senha = scanner.nextLine();
+        
+        System.out.print("Telefone Celular: ");
+        String telefone = scanner.nextLine();
+
+        int novoId = usuariosBD.size() + 1;
+
+        if (tipo.equals("1")) {
+            // Cria Membro
+            Membro novoMembro = new Membro(novoId, nome, email, senha, telefone);
+            usuariosBD.add(novoMembro);
+            System.out.println("SUCESSO: Conta de Membro criada!");
+
+        } else if (tipo.equals("2")) {
+            // Cria Administrador e pede dados extras
+            System.out.println("\n--- DADOS DO SEU ESPAÇO/EMPRESA ---");
+            System.out.print("Razão Social: ");
+            String razao = scanner.nextLine();
+            
+            System.out.print("CNPJ: ");
+            String cnpj = scanner.nextLine();
+            
+            System.out.print("E-mail da Empresa: ");
+            String emailEmp = scanner.nextLine();
+            
+            System.out.print("Endereço Completo: ");
+            String endereco = scanner.nextLine();
+            
+            System.out.print("Descrição do Lugar: ");
+            String descricao = scanner.nextLine();
+
+            Administrador novoAdmin = new Administrador(novoId, nome, email, senha, telefone, 
+                                                        razao, cnpj, emailEmp, endereco, descricao);
+            
+            // Simulação de adicionar fotos
+            System.out.println("Deseja adicionar fotos agora? (S/N)");
+            if (scanner.nextLine().equalsIgnoreCase("S")) {
+                System.out.print("Digite o nome do arquivo da foto (ex: sala.jpg): ");
+                novoAdmin.adicionarFoto(scanner.nextLine());
+            }
+
+            usuariosBD.add(novoAdmin);
+            System.out.println("SUCESSO: Conta de Administrador criada!");
+        } else {
+            System.out.println("Opção inválida. Cadastro cancelado.");
+        }
+    }
+
+    // --- MENUS EXISTENTES (Levemente ajustados) ---
+
     private static void exibirMenuLogin(Scanner scanner) {
-        System.out.println("\n--- LOGIN (RF01) ---");
         System.out.print("E-mail: ");
         String email = scanner.nextLine();
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
         if (fazerLogin(email, senha)) {
-            System.out.println("Login realizado com sucesso! Bem-vindo, " + usuarioLogado.getNome());
+            System.out.println("Bem-vindo, " + usuarioLogado.getNome());
+            // Verifica o tipo para dar boas vindas personalizadas
+            if (usuarioLogado instanceof Administrador) {
+                System.out.println("Painel de Gestão do Proprietário: " + ((Administrador) usuarioLogado).getNomeEmpresa());
+            }
         } else {
             System.out.println("ERRO: Credenciais inválidas.");
         }
     }
+
     private static void exibirMenuPrincipal(Scanner scanner) {
-        System.out.println("\n--- MENU PRINCIPAL ---");
-        System.out.println("1. Visualizar Espaços Disponíveis (RF05)");
-        System.out.println("2. Fazer Nova Reserva (RF06)");
-        System.out.println("3. Minhas Reservas");
+        System.out.println("\n--- MENU ---");
+        
+        // Menu dinâmico dependendo de quem logou
+        if (usuarioLogado instanceof Membro) {
+            System.out.println("1. Visualizar Espaços");
+            System.out.println("2. Fazer Reserva");
+            System.out.println("3. Minhas Reservas");
+        } else if (usuarioLogado instanceof Administrador) {
+            System.out.println("1. Visualizar Meus Espaços");
+            System.out.println("2. Ver Reservas no meu Local (Relatório)");
+            System.out.println("3. Ver Detalhes da Minha Empresa");
+        }
+        
         System.out.println("0. Sair");
         System.out.print("Escolha: ");
-
+        
         String opcao = scanner.nextLine();
 
-        switch (opcao) {
-            case "1":
-                listarEspacos();
-                break;
-            case "2":
-                fluxoReserva(scanner);
-                break;
-            case "3":
-                listarMinhasReservas();
-                break;
-            case "0":
-                usuarioLogado = null;
-                System.out.println("Logout realizado.");
-                break;
-            default:
-                System.out.println("Opção inválida.");
+        if (opcao.equals("0")) {
+            usuarioLogado = null;
+            return;
+        }
+
+        // Lógica simples para os testes funcionais anteriores continuarem funcionando para Membros
+        if (usuarioLogado instanceof Membro) {
+            switch (opcao) {
+                case "1": listarEspacos(); break;
+                case "2": fluxoReserva(scanner); break;
+                case "3": listarMinhasReservas(); break;
+                default: System.out.println("Opção inválida");
+            }
+        } else if (usuarioLogado instanceof Administrador) {
+             switch (opcao) {
+                case "1": listarEspacos(); break; // Admin vê tudo por enquanto
+                case "2": listarMinhasReservas(); break; // Reutilizando logica para teste
+                case "3": ((Administrador) usuarioLogado).exibirDetalhesEmpresa(); break;
+                default: System.out.println("Opção inválida");
+            }
         }
     }
-    // RF01 - Autenticação
-    // Critério de Aceitação I: O sistema deve validar as credenciais[cite: 76].
+
+    // --- MÉTODOS AUXILIARES (Login, Reserva, Listar) ---
+    // (Mantenha os métodos fazerLogin, listarEspacos, fluxoReserva, criarReserva iguais aos anteriores,
+    // apenas lembrando que agora eles usam a lista de Usuarios que contém Membros e Admins)
+
     private static boolean fazerLogin(String email, String senha) {
         for (Usuario u : usuariosBD) {
             if (u.getEmail().equalsIgnoreCase(email) && u.getSenha().equals(senha)) {
@@ -78,107 +187,70 @@ public class SmartWorkingSystem {
         }
         return false;
     }
-
-    // RF05 - Visualizar Espaços
-    // Critério de Aceitação I: Exibir lista de mesas e salas[cite: 77].
+    
     private static void listarEspacos() {
-        System.out.println("\n--- ESPAÇOS DO COWORKING ---");
+        System.out.println("\n--- ESPAÇOS DISPONÍVEIS ---");
         for (Espaco e : espacosBD) {
             System.out.println(e.toString());
         }
     }
 
-    // RF06 - Reservar Espaço
     private static void fluxoReserva(Scanner scanner) {
+        // (Copie o código do fluxoReserva que te mandei antes aqui)
+        // Por brevidade, mantive a mesma lógica:
         listarEspacos();
-        System.out.print("\nDigite o ID do espaço que deseja reservar: ");
-        int idEspaco = Integer.parseInt(scanner.nextLine());
-
-        Espaco espacoSelecionado = espacosBD.stream()
-                .filter(e -> e.getId() == idEspaco)
-                .findFirst()
-                .orElse(null);
-
-        if (espacoSelecionado == null) {
-            System.out.println("Espaço não encontrado.");
-            return;
-        }
-
-        System.out.println("Digite a data e hora de início (formato: dd/MM/yyyy HH:mm)");
-        System.out.println("Exemplo: 20/10/2025 14:00");
-        System.out.print("Data: ");
-        String dataStr = scanner.nextLine();
-
-        System.out.print("Duração em horas (inteiro): ");
-        int duracao = Integer.parseInt(scanner.nextLine());
-
+        System.out.print("\nID do espaço: ");
         try {
+            int id = Integer.parseInt(scanner.nextLine());
+            Espaco espaco = espacosBD.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
+            if(espaco == null) { System.out.println("Não encontrado"); return; }
+            
+            System.out.print("Data (dd/MM/yyyy HH:mm): ");
+            String dataStr = scanner.nextLine();
+            System.out.print("Duração (horas): ");
+            int duracao = Integer.parseInt(scanner.nextLine());
+            
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             LocalDateTime inicio = LocalDateTime.parse(dataStr, fmt);
-
-            // Tenta criar a reserva aplicando a regra RN05
-            criarReserva(usuarioLogado, espacoSelecionado, inicio, duracao);
-            System.out.println("SUCESSO: Reserva confirmada para " + espacoSelecionado.getNome());
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("ERRO DE NEGÓCIO: " + e.getMessage());
+            
+            criarReserva(usuarioLogado, espaco, inicio, duracao);
+            System.out.println("Reserva Confirmada!");
         } catch (Exception e) {
-            System.out.println("ERRO: Formato de data inválido ou entrada incorreta.");
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 
-    // RN05 - Reservas sem conflito
-    // "O sistema não deve permitir reservas sobrepostas para o mesmo espaço"[cite: 95, 96].
     private static void criarReserva(Usuario user, Espaco espaco, LocalDateTime inicio, int horas) {
         LocalDateTime fim = inicio.plusHours(horas);
-
-        // Verificação de Conflito (CORE DO SISTEMA)
         for (Reserva r : reservasBD) {
-            // Se for o mesmo espaço
             if (r.getEspaco().getId() == espaco.getId()) {
-                // Se houver sobreposição de horários
-                // (Novo Inicio < Fim Existente) E (Novo Fim > Inicio Existente)
                 if (inicio.isBefore(r.getFim()) && fim.isAfter(r.getInicio())) {
-                    throw new IllegalArgumentException("Espaço Indisponível! Já existe reserva neste horário.");
+                    throw new IllegalArgumentException("Conflito de horário!");
                 }
             }
         }
-
-        // Se passou, adiciona a reserva
-        Reserva novaReserva = new Reserva(user, espaco, inicio, horas);
-        reservasBD.add(novaReserva);
+        reservasBD.add(new Reserva(user, espaco, inicio, horas));
     }
 
     private static void listarMinhasReservas() {
-        System.out.println("\n--- MINHAS RESERVAS ---");
-        boolean temReserva = false;
-        for (Reserva r : reservasBD) {
-            // Filtro simplificado (na vida real verificaria o ID do usuário)
-            if (r.toString().contains(usuarioLogado.getNome()) || true) {
-                // Aqui simplifiquei para mostrar todas no console para teste
-                System.out.println(r.toString() + " (Reservado por: " + usuarioLogado.getNome() + ")");
-                temReserva = true;
-            }
-        }
-        if(!temReserva) System.out.println("Nenhuma reserva encontrada.");
+        System.out.println("--- RESERVAS ---");
+        for(Reserva r : reservasBD) System.out.println(r.toString());
     }
 
-    // --- DADOS INICIAIS PARA TESTE ---
+    // --- DADOS INICIAIS (ATUALIZADO PARA USAR NOVAS CLASSES) ---
     private static void inicializarDados() {
-        // Criando Usuários (Membros e Admin)
-        usuariosBD.add(new Usuario(1, "Isabele", "isa@smart.com", "123456"));
-        usuariosBD.add(new Usuario(2, "João", "joao@smart.com", "senha123")); // Use este para testar conflito
+        // Criando um Membro de teste
+        usuariosBD.add(new Membro(1, "Isabele", "isa@smart.com", "123456", "9999-8888"));
+        
+        // Criando um Admin de teste
+        Administrador admin = new Administrador(2, "Carlos Dono", "carlos@admin.com", "admin123", "9888-7777",
+                "Coworking Top Ltda", "12.345.678/0001-99", "contato@coworkingtop.com", 
+                "Av Rio Branco, 100", "Melhor espaço do Rio");
+        admin.adicionarFoto("fachada.jpg");
+        usuariosBD.add(admin);
 
-        // Criando Espaços (Baseado no PDF pag 26 e 28)
-        espacosBD.add(new Espaco(1, "Sala 01", "Sala de Reunião", 420.00));
-        espacosBD.add(new Espaco(2, "Escritório 02", "Sala Privativa", 500.00));
-        espacosBD.add(new Espaco(3, "Mesa Compartilhada A", "Mesa", 25.00));
-
-        // Pré-carregando uma reserva para testar conflitos (Para testar RN05)
-        // Reserva da Sala 01 para dia 20/10/2025 as 14:00 (duracao 2h)
-        Usuario u1 = usuariosBD.get(0);
-        Espaco e1 = espacosBD.get(0);
-        LocalDateTime inicio = LocalDateTime.of(2025, 10, 20, 14, 0);
-        reservasBD.add(new Reserva(u1, e1, inicio, 2));
+        // Espaços
+        espacosBD.add(new Espaco(1, "Sala 01", "Reunião", 420.00));
+        espacosBD.add(new Espaco(2, "Mesa A", "Compartilhada", 25.00));
     }
 }
