@@ -1,17 +1,27 @@
 public class Usuario {
-    private int id;
-    private String nome;
-    private String email;
-    private String senha;
+    protected int id;
+    protected String nome;
+    protected String email;
+    protected String senha;
+    protected String telefone; // Novo campo
 
-    public Usuario(int id, String nome, String email, String senha) {
+    public Usuario(int id, String nome, String email, String senha, String telefone) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.telefone = telefone;
     }
 
     public String getEmail() { return email; }
     public String getSenha() { return senha; }
     public String getNome() { return nome; }
+    public int getId() { return id; }
+
+    // Metodo para facilitar a exibição
+    @Override
+    public String toString() {
+        return id + " - " + nome + " (" + email + ")";
+    }
 }
+
