@@ -1,0 +1,10 @@
+src/main/java/com/example/smartworkingsystem/model/Usuario.class
+src/main/java/com/example/smartworkingsystem/controller/ReservaController.class
+src/main/java/com/example/smartworkingsystem/model/Administrador.class
+src/main/java/com/example/smartworkingsystem/model/Membro.class
+src/main/java/com/example/smartworkingsystem/model/Espaco.class
+src/main/java/com/example/smartworkingsystem/model/Reserva.class
+src/main/java/com/example/smartworkingsystem/controller/EspacoController.class
+src/main/java/com/example/smartworkingsystem/controller/UsuarioController.class
+com/example/smartworkingsystem/SmartWorkingSystemApplication.class
+src/main/java/com/example/smartworkingsystem/DataSeeder.class
