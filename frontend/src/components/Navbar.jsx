@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import styles from "./Navbar.module.css";
 
 const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -11,19 +12,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav>
-      <Link to="/">Dashboard</Link>
-      {user ? (
-        <>
-          <Link to="/admin">Admin</Link>
+    <nav className={styles.navbar}>
+      <div className={styles.navLinks}>
+        <Link to="/">Dashboard</Link>
+        {user && <Link to="/admin">Admin</Link>}
+      </div>
+      <div>
+        {user ? (
           <button onClick={handleLogout}>Sair</button>
-        </>
-      ) : (
-        <>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Cadastro</Link>
-        </>
-      )}
+        ) : (
+          <div className={styles.navLinks}>
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Cadastro</Link>
+          </div>
+        )}
+      </div>
     </nav>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../services/api";
+import styles from "./Admin.module.css";
 
 const Admin = () => {
   const [nome, setNome] = useState("");
@@ -34,9 +35,9 @@ const Admin = () => {
   };
 
   return (
-    <div>
-      <h2>Admin - Cadastrar Novo Espaço</h2>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <h2>Admin - Cadastrar Novo Espaço</h2>
         <input
           type="text"
           value={nome}

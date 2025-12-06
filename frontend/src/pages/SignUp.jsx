@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import styles from "./SignUp.module.css";
 
 const SignUp = () => {
   const [nome, setNome] = useState("");
@@ -20,9 +21,9 @@ const SignUp = () => {
   };
 
   return (
-    <div>
-      <h2>Cadastro</h2>
-      <form onSubmit={handleSignUp}>
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSignUp}>
+        <h2>Cadastro</h2>
         <input
           type="text"
           value={nome}
