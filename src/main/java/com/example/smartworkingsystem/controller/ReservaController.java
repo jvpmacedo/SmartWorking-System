@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class ReservaController {
 
     public static List<Reserva> reservas = new ArrayList<>();
+    private static int nextId = 0;
 
     @PostMapping
     public ResponseEntity<String> fazerReserva(@RequestBody Reserva reserva) {
@@ -22,8 +23,9 @@ public class ReservaController {
             r.getFim().isAfter(reserva.getInicio()));
 
         if (conflito) {
-            return new ResponseEntity<>("Horário indisponível.", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Data Indisponível para o período selecionado", HttpStatus.CONFLICT);
         } else {
+            reserva.setId(nextId++);
             reservas.add(reserva);
             return new ResponseEntity<>("Reserva efetuada com sucesso!", HttpStatus.CREATED);
         }
@@ -43,5 +45,15 @@ public class ReservaController {
                 .filter(r -> r.getEspaco().getId() == idEspaco)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(reservasDoEspaco, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarReserva(@PathVariable int id) {
+        boolean removed = reservas.removeIf(r -> r.getId() == id);
+        if (removed) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -17,11 +17,13 @@ const Reserva = () => {
     let duracaoFinal = duracao;
 
     if (tipoReserva === "DIARIA") {
-      // For daily reservations, we can calculate the duration in days
       const start = new Date(dataInicio);
       const end = new Date(dataFim);
       const diffTime = Math.abs(end - start);
-      duracaoFinal = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      duracaoFinal = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      dataInicioFinal = `${dataInicio}T08:00:00`;
+    } else if (tipoReserva === "MENSAL") {
+      dataInicioFinal = `${dataInicio}T08:00:00`;
     }
 
     navigate("/pagamento", {
@@ -44,6 +46,7 @@ const Reserva = () => {
         {espaco.fotoBase64 && <img src={espaco.fotoBase64} alt={espaco.nome} className={styles.image} />}
         <h2>Reservar {espaco.nome}</h2>
         <p>{espaco.tipo}</p>
+        <p className={styles.politica}>{espaco.politicaCancelamento}</p>
         <select value={tipoReserva} onChange={(e) => setTipoReserva(e.target.value)}>
           <option value="HORA">Por Hora (R$ {espaco.precoHora})</option>
           <option value="DIARIA">Por Dia (R$ {espaco.precoDiaria})</option>

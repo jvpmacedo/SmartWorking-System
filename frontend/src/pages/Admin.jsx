@@ -6,8 +6,11 @@ const Admin = () => {
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("Mesa");
   const [precoHora, setPrecoHora] = useState("");
+  const [precoDiaria, setPrecoDiaria] = useState("");
+  const [precoMensal, setPrecoMensal] = useState("");
   const [fotoBase64, setFotoBase64] = useState("");
   const [endereco, setEndereco] = useState("");
+  const [politicaCancelamento, setPoliticaCancelamento] = useState("");
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -27,8 +30,11 @@ const Admin = () => {
         nome,
         tipo,
         precoHora: parseFloat(precoHora),
+        precoDiaria: parseFloat(precoDiaria),
+        precoMensal: parseFloat(precoMensal),
         fotoBase64,
         endereco,
+        politicaCancelamento,
       });
       alert("Espaço cadastrado com sucesso!");
     } catch (error) {
@@ -64,6 +70,23 @@ const Admin = () => {
           onChange={(e) => setPrecoHora(e.target.value)}
           placeholder="Preço por Hora"
           required
+        />
+        <input
+          type="number"
+          value={precoDiaria}
+          onChange={(e) => setPrecoDiaria(e.target.value)}
+          placeholder="Preço por Dia"
+        />
+        <input
+          type="number"
+          value={precoMensal}
+          onChange={(e) => setPrecoMensal(e.target.value)}
+          placeholder="Preço por Mês"
+        />
+        <textarea
+          value={politicaCancelamento}
+          onChange={(e) => setPoliticaCancelamento(e.target.value)}
+          placeholder="Política de Cancelamento"
         />
         <input type="file" accept="image/*" onChange={handleFileChange} />
         <button type="submit">Cadastrar</button>

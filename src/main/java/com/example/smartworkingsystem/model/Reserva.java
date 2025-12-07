@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class Reserva {
+    private int id;
     private Usuario usuario;
     private Espaco espaco;
     private LocalDateTime dataInicio;
@@ -33,12 +34,15 @@ public class Reserva {
         }
     }
 
+    public int getId() { return id; }
     public Espaco getEspaco() { return espaco; }
     public Usuario getUsuario() { return usuario; }
     public LocalDateTime getInicio() { return dataInicio; }
     public LocalDateTime getFim() { return dataFim; }
     public TipoReserva getTipoReserva() { return tipoReserva; }
     public double getValorTotal() { return valorTotal; }
+
+    public void setId(int id) { this.id = id; }
 
     @Override
     public String toString() {

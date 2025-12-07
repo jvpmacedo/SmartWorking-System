@@ -9,8 +9,9 @@ public class Espaco {
     private double precoMensal;
     private String fotoBase64;
     private String endereco;
+    private String politicaCancelamento;
 
-    public Espaco(int id, String nome, String tipo, double precoHora, double precoDiaria, double precoMensal, String fotoBase64, String endereco) {
+    public Espaco(int id, String nome, String tipo, double precoHora, double precoDiaria, double precoMensal, String fotoBase64, String endereco, String politicaCancelamento) {
         this.id = id;
         this.nome = nome;
         this.tipo = tipo;
@@ -19,6 +20,7 @@ public class Espaco {
         this.precoMensal = precoMensal;
         this.fotoBase64 = fotoBase64;
         this.endereco = endereco;
+        this.politicaCancelamento = politicaCancelamento;
     }
 
     public int getId() { return id; }
@@ -28,6 +30,7 @@ public class Espaco {
     public double getPrecoMensal() { return precoMensal; }
     public String getFotoBase64() { return fotoBase64; }
     public String getEndereco() { return endereco; }
+    public String getPoliticaCancelamento() { return politicaCancelamento; }
 
     public void setNome(String nome) { this.nome = nome; }
     public void setTipo(String tipo) { this.tipo = tipo; }
@@ -36,6 +39,7 @@ public class Espaco {
     public void setPrecoMensal(double precoMensal) { this.precoMensal = precoMensal; }
     public void setFotoBase64(String fotoBase64) { this.fotoBase64 = fotoBase64; }
     public void setEndereco(String endereco) { this.endereco = endereco; }
+    public void setPoliticaCancelamento(String politicaCancelamento) { this.politicaCancelamento = politicaCancelamento; }
 
 
     @Override
