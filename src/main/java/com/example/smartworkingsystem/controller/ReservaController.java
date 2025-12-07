@@ -17,7 +17,7 @@ public class ReservaController {
 
     @PostMapping
     public ResponseEntity<String> fazerReserva(@RequestBody Reserva reserva) {
-        boolean conflito = reservas.stream().anyMatch(r -> r.getEspaco().equals(reserva.getEspaco()) &&
+        boolean conflito = reservas.stream().anyMatch(r -> r.getEspaco().getId() == reserva.getEspaco().getId() &&
             r.getInicio().isBefore(reserva.getFim()) && 
             r.getFim().isAfter(reserva.getInicio()));
 
@@ -35,5 +35,13 @@ public class ReservaController {
                 .filter(r -> r.getUsuario().getId() == id)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(reservasDoUsuario, HttpStatus.OK);
+    }
+
+    @GetMapping("/espaco/{idEspaco}")
+    public ResponseEntity<List<Reserva>> getReservasPorEspaco(@PathVariable int idEspaco) {
+        List<Reserva> reservasDoEspaco = reservas.stream()
+                .filter(r -> r.getEspaco().getId() == idEspaco)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(reservasDoEspaco, HttpStatus.OK);
     }
 }

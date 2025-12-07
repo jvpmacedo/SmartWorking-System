@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "./Pagamento.module.css";
@@ -6,7 +6,7 @@ import styles from "./Pagamento.module.css";
 const Pagamento = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { espaco, dataInicio, horasDuracao } = location.state || {};
+  const { espaco, dataInicio, duracao, tipoReserva } = location.state || {};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +17,8 @@ const Pagamento = () => {
         usuario: { id: user.id },
         espaco: { id: espaco.id },
         dataInicio,
-        horasDuracao,
+        duracao,
+        tipoReserva,
       });
       alert("Reserva Confirmada com Sucesso!");
       navigate("/dashboard");

@@ -25,8 +25,7 @@ const Dashboard = () => {
   };
 
   const handleManage = (espaco) => {
-    // Implementar a lógica de gerenciamento de espaço
-    console.log("Gerenciar espaço:", espaco);
+    navigate("/gerenciamento-ocupacao", { state: { espaco } });
   };
 
   return (
@@ -41,7 +40,7 @@ const Dashboard = () => {
             <p>{espaco.tipo}</p>
             <p>R$ {espaco.precoHora}/hora</p>
             {user && user.email === "admin@email.com" ? (
-              <button onClick={() => handleManage(espaco)}>Gerenciar Espaço</button>
+              <button onClick={() => handleManage(espaco)}>Gerenciar Ocupação</button>
             ) : (
               <button onClick={() => handleReserve(espaco)}>Reservar</button>
             )}

@@ -6,12 +6,32 @@ const Reserva = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { espaco } = location.state || {};
+  const [tipoReserva, setTipoReserva] = useState("HORA");
   const [dataInicio, setDataInicio] = useState("");
-  const [horasDuracao, setHorasDuracao] = useState(1);
+  const [dataFim, setDataFim] = useState("");
+  const [duracao, setDuracao] = useState(1);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/pagamento", { state: { espaco, dataInicio, horasDuracao } });
+    let dataInicioFinal = dataInicio;
+    let duracaoFinal = duracao;
+
+    if (tipoReserva === "DIARIA") {
+      // For daily reservations, we can calculate the duration in days
+      const start = new Date(dataInicio);
+      const end = new Date(dataFim);
+      const diffTime = Math.abs(end - start);
+      duracaoFinal = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    }
+
+    navigate("/pagamento", {
+      state: {
+        espaco,
+        dataInicio: dataInicioFinal,
+        duracao: duracaoFinal,
+        tipoReserva,
+      },
+    });
   };
 
   if (!espaco) {
@@ -24,20 +44,66 @@ const Reserva = () => {
         {espaco.fotoBase64 && <img src={espaco.fotoBase64} alt={espaco.nome} className={styles.image} />}
         <h2>Reservar {espaco.nome}</h2>
         <p>{espaco.tipo}</p>
-        <p>R$ {espaco.precoHora}/hora</p>
-        <input
-          type="datetime-local"
-          value={dataInicio}
-          onChange={(e) => setDataInicio(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          value={horasDuracao}
-          onChange={(e) => setHorasDuracao(parseInt(e.target.value, 10))}
-          min="1"
-          required
-        />
+        <select value={tipoReserva} onChange={(e) => setTipoReserva(e.target.value)}>
+          <option value="HORA">Por Hora (R$ {espaco.precoHora})</option>
+          <option value="DIARIA">Por Dia (R$ {espaco.precoDiaria})</option>
+          <option value="MENSAL">Por Mês (R$ {espaco.precoMensal})</option>
+        </select>
+
+        {tipoReserva === "HORA" && (
+          <>
+            <input
+              type="datetime-local"
+              value={dataInicio}
+              onChange={(e) => setDataInicio(e.target.value)}
+              required
+            />
+            <input
+              type="number"
+              value={duracao}
+              onChange={(e) => setDuracao(parseInt(e.target.value, 10))}
+              min="1"
+              required
+            />
+          </>
+        )}
+
+        {tipoReserva === "DIARIA" && (
+          <>
+            <input
+              type="date"
+              value={dataInicio}
+              onChange={(e) => setDataInicio(e.target.value)}
+              required
+            />
+            <input
+              type="date"
+              value={dataFim}
+              onChange={(e) => setDataFim(e.target.value)}
+              required
+            />
+          </>
+        )}
+
+        {tipoReserva === "MENSAL" && (
+          <>
+            <input
+              type="date"
+              value={dataInicio}
+              onChange={(e) => setDataInicio(e.target.value)}
+              required
+            />
+            <input
+              type="number"
+              value={duracao}
+              onChange={(e) => setDuracao(parseInt(e.target.value, 10))}
+              min="1"
+              placeholder="Duração (meses)"
+              required
+            />
+          </>
+        )}
+
         <button type="submit">Ir para Pagamento</button>
       </form>
     </div>
