@@ -1,7 +1,6 @@
 package com.example.smartworkingsystem.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 public class Reserva {
     private int id;
@@ -50,8 +49,7 @@ public class Reserva {
         return "Reserva: " + espaco.getNome() + " | Início: " + dataInicio.format(fmt) + " | Fim: " + dataFim.format(fmt);
     }
 
-    public void setEspaco(Espaco espacoCompleto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setEspaco'");
+    public void setEspaco(Espaco espaco) {
+        this.espaco = espaco;
     }
 }
