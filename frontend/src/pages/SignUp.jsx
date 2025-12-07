@@ -12,6 +12,10 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    if (senha.length < 6) {
+      alert("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
     try {
       await api.post("/usuarios", { nome, email, senha, telefone });
       navigate("/login");

@@ -15,6 +15,7 @@ public class Reserva {
     }
 
     public Espaco getEspaco() { return espaco; }
+    public Usuario getUsuario() { return usuario; }
     public LocalDateTime getInicio() { return dataInicio; }
     public LocalDateTime getFim() { return dataFim; }
 

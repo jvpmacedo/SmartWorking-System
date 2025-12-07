@@ -21,6 +21,10 @@ const Perfil = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    if (senha && senha.length < 6) {
+      alert("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
     try {
       const response = await api.put(`/usuarios/${user.id}`, { nome, email, senha });
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -68,7 +72,7 @@ const Perfil = () => {
           type="password"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          placeholder="Nova Senha"
+          placeholder="Nova Senha (mínimo 6 caracteres)"
         />
         <button type="submit">Salvar Alterações</button>
       </form>

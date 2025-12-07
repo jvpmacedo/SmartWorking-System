@@ -1,8 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./LandingPage.module.css";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
   return (
     <div className={styles.container}>
       <header className={styles.hero}>

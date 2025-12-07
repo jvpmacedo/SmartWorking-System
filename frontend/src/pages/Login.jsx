@@ -8,17 +8,19 @@ const Login = () => {
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    api
-      .post("/usuarios/login", { email, senha })
-      .then((response) => {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        navigate("/");
-      })
-      .catch((error) => {
-        alert("Falha no login, verifique suas credenciais.");
-      });
+    if (senha.length < 6) {
+      alert("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+    try {
+      const response = await api.post("/usuarios/login", { email, senha });
+      localStorage.setItem("user", JSON.stringify(response.data));
+      navigate("/");
+    } catch (error) {
+      alert("Falha no login, verifique suas credenciais.");
+    }
   };
 
   return (

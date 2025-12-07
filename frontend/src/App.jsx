@@ -8,6 +8,7 @@ import Reserva from "./pages/Reserva";
 import Perfil from "./pages/Perfil";
 import Pagamento from "./pages/Pagamento";
 import LandingPage from "./pages/LandingPage";
+import MinhasReservas from "./pages/MinhasReservas";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -56,6 +57,14 @@ function App() {
           element={
             <PrivateRoute>
               <Pagamento />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/minhas-reservas"
+          element={
+            <PrivateRoute>
+              <MinhasReservas />
             </PrivateRoute>
           }
         />

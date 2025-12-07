@@ -6,6 +6,7 @@ import styles from "./Dashboard.module.css";
 const Dashboard = () => {
   const [espacos, setEspacos] = useState([]);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const fetchEspacos = async () => {
@@ -23,6 +24,11 @@ const Dashboard = () => {
     navigate("/reservar", { state: { espaco } });
   };
 
+  const handleManage = (espaco) => {
+    // Implementar a lógica de gerenciamento de espaço
+    console.log("Gerenciar espaço:", espaco);
+  };
+
   return (
     <div className={styles.container}>
       <h2>Dashboard</h2>
@@ -34,7 +40,11 @@ const Dashboard = () => {
             <p>{espaco.endereco}</p>
             <p>{espaco.tipo}</p>
             <p>R$ {espaco.precoHora}/hora</p>
-            <button onClick={() => handleReserve(espaco)}>Reservar</button>
+            {user && user.email === "admin@email.com" ? (
+              <button onClick={() => handleManage(espaco)}>Gerenciar Espaço</button>
+            ) : (
+              <button onClick={() => handleReserve(espaco)}>Reservar</button>
+            )}
           </div>
         ))}
       </div>

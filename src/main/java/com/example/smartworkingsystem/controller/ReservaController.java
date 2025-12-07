@@ -28,4 +28,12 @@ public class ReservaController {
             return new ResponseEntity<>("Reserva efetuada com sucesso!", HttpStatus.CREATED);
         }
     }
+
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<List<Reserva>> getReservasPorUsuario(@PathVariable int id) {
+        List<Reserva> reservasDoUsuario = reservas.stream()
+                .filter(r -> r.getUsuario().getId() == id)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(reservasDoUsuario, HttpStatus.OK);
+    }
 }
