@@ -20,6 +20,7 @@
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .form button {
@@ -35,4 +36,9 @@
 
 .form button:hover {
   background-color: #0056b3;
+}
+
+.link {
+  text-align: center;
+  margin-top: 1rem;
 }

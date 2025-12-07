@@ -35,7 +35,13 @@ public class ReservaController {
     public ResponseEntity<List<Reserva>> getReservasPorUsuario(@PathVariable int id) {
         List<Reserva> reservasDoUsuario = reservas.stream()
                 .filter(r -> r.getUsuario().getId() == id)
-                .collect(Collectors.toList());
+                .map(reserva -> {
+                    Espaco espacoCompleto = EspacoController.espacos.stream()
+                            .filter(e -> e.getId() == reserva.getEspaco().getId())
+                            .findFirst().orElse(null);
+                    reserva.setEspaco(espacoCompleto);
+                    return reserva;
+                }).collect(Collectors.toList());
         return new ResponseEntity<>(reservasDoUsuario, HttpStatus.OK);
     }
 

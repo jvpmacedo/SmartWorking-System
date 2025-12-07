@@ -49,4 +49,9 @@ public class Reserva {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return "Reserva: " + espaco.getNome() + " | Início: " + dataInicio.format(fmt) + " | Fim: " + dataFim.format(fmt);
     }
+
+    public void setEspaco(Espaco espacoCompleto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setEspaco'");
+    }
 }

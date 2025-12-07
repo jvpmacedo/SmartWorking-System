@@ -32,16 +32,30 @@ const MinhasReservas = () => {
     }
   };
 
+  const calcularTotal = (reserva) => {
+    if (reserva.tipoReserva === "HORA") {
+      return reserva.espaco.precoHora * reserva.duracao;
+    } else if (reserva.tipoReserva === "DIARIA") {
+      return reserva.espaco.precoDiaria * reserva.duracao;
+    } else if (reserva.tipoReserva === "MENSAL") {
+      return reserva.espaco.precoMensal * reserva.duracao;
+    }
+    return 0;
+  }
+
   return (
     <div className={styles.container}>
       <h2>Minhas Reservas</h2>
       <div className={styles.grid}>
         {reservas.map((reserva) => (
           <div key={reserva.id} className={styles.card}>
+            {reserva.espaco.fotoBase64 && <img src={reserva.espaco.fotoBase64} alt={reserva.espaco.nome} className={styles.image} />}
             <h3>{reserva.espaco.nome}</h3>
             <p>{reserva.espaco.endereco}</p>
+            <p>ID da Reserva: {reserva.id}</p>
             <p>Início: {new Date(reserva.inicio).toLocaleString()}</p>
             <p>Fim: {new Date(reserva.fim).toLocaleString()}</p>
+            <p>Total: R$ {calcularTotal(reserva).toFixed(2)}</p>
             <button onClick={() => handleCancel(reserva)}>Cancelar</button>
           </div>
         ))}

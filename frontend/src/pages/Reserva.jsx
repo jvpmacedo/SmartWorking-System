@@ -47,67 +47,79 @@ const Reserva = () => {
         <h2>Reservar {espaco.nome}</h2>
         <p>{espaco.tipo}</p>
         <p className={styles.politica}>{espaco.politicaCancelamento}</p>
-        <select value={tipoReserva} onChange={(e) => setTipoReserva(e.target.value)}>
-          <option value="HORA">Por Hora (R$ {espaco.precoHora})</option>
-          <option value="DIARIA">Por Dia (R$ {espaco.precoDiaria})</option>
-          <option value="MENSAL">Por Mês (R$ {espaco.precoMensal})</option>
-        </select>
+        <div className={styles.inputGroup}>
+          <select className={`${styles.select} ${styles.inputField}`} value={tipoReserva} onChange={(e) => setTipoReserva(e.target.value)}>
+            <option value="HORA">Por Hora (R$ {espaco.precoHora})</option>
+            <option value="DIARIA">Por Dia (R$ {espaco.precoDiaria})</option>
+            <option value="MENSAL">Por Mês (R$ {espaco.precoMensal})</option>
+          </select>
 
-        {tipoReserva === "HORA" && (
-          <>
-            <input
-              type="datetime-local"
-              value={dataInicio}
-              onChange={(e) => setDataInicio(e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              value={duracao}
-              onChange={(e) => setDuracao(parseInt(e.target.value, 10))}
-              min="1"
-              required
-            />
-          </>
-        )}
+          {tipoReserva === "HORA" && (
+            <>
+              <label>Data e Hora</label>
+              <input
+                className={styles.inputField}
+                type="datetime-local"
+                value={dataInicio}
+                onChange={(e) => setDataInicio(e.target.value)}
+                required
+              />
+              <input
+                className={styles.inputField}
+                type="number"
+                value={duracao}
+                onChange={(e) => setDuracao(parseInt(e.target.value, 10))}
+                min="1"
+                required
+              />
+            </>
+          )}
 
-        {tipoReserva === "DIARIA" && (
-          <>
-            <input
-              type="date"
-              value={dataInicio}
-              onChange={(e) => setDataInicio(e.target.value)}
-              required
-            />
-            <input
-              type="date"
-              value={dataFim}
-              onChange={(e) => setDataFim(e.target.value)}
-              required
-            />
-          </>
-        )}
+          {tipoReserva === "DIARIA" && (
+            <>
+              <label>Data de Início</label>
+              <input
+                className={styles.inputField}
+                type="date"
+                value={dataInicio}
+                onChange={(e) => setDataInicio(e.target.value)}
+                required
+              />
+              <label>Data de Fim</label>
+              <input
+                className={styles.inputField}
+                type="date"
+                value={dataFim}
+                onChange={(e) => setDataFim(e.target.value)}
+                required
+              />
+            </>
+          )}
 
-        {tipoReserva === "MENSAL" && (
-          <>
-            <input
-              type="date"
-              value={dataInicio}
-              onChange={(e) => setDataInicio(e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              value={duracao}
-              onChange={(e) => setDuracao(parseInt(e.target.value, 10))}
-              min="1"
-              placeholder="Duração (meses)"
-              required
-            />
-          </>
-        )}
+          {tipoReserva === "MENSAL" && (
+            <>
+              <label>Data de Início</label>
+              <input
+                className={styles.inputField}
+                type="date"
+                value={dataInicio}
+                onChange={(e) => setDataInicio(e.target.value)}
+                required
+              />
+              <input
+                className={styles.inputField}
+                type="number"
+                value={duracao}
+                onChange={(e) => setDuracao(parseInt(e.target.value, 10))}
+                min="1"
+                placeholder="Duração (meses)"
+                required
+              />
+            </>
+          )}
 
-        <button type="submit">Ir para Pagamento</button>
+          <button className={styles.button} type="submit">Ir para Pagamento</button>
+        </div>
       </form>
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "./Pagamento.module.css";
@@ -7,6 +7,19 @@ const Pagamento = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { espaco, dataInicio, duracao, tipoReserva } = location.state || {};
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (espaco) {
+      if (tipoReserva === "HORA") {
+        setTotal(espaco.precoHora * duracao);
+      } else if (tipoReserva === "DIARIA") {
+        setTotal(espaco.precoDiaria * duracao);
+      } else if (tipoReserva === "MENSAL") {
+        setTotal(espaco.precoMensal * duracao);
+      }
+    }
+  }, [espaco, duracao, tipoReserva]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,6 +48,7 @@ const Pagamento = () => {
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
         <h2>Pagamento</h2>
+        <h3>Total: R$ {total.toFixed(2)}</h3>
         <input type="text" placeholder="Número do Cartão" />
         <input type="text" placeholder="Nome no Cartão" />
         <input type="text" placeholder="Validade" />

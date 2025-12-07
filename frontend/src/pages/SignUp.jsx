@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "./SignUp.module.css";
 
@@ -8,12 +8,17 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [telefone, setTelefone] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (senha.length < 6) {
       alert("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+    if (!termsAccepted) {
+      alert("Você deve aceitar os termos e condições.");
       return;
     }
     try {
@@ -56,7 +61,18 @@ const SignUp = () => {
           placeholder="Telefone"
           required
         />
+        <div className={styles.checkboxContainer}>
+          <input
+            type="checkbox"
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.target.checked)}
+          />
+          <label>Eu aceito os termos e condições</label>
+        </div>
         <button type="submit">Cadastrar</button>
+        <p className={styles.link}>
+          Já possui uma conta? <Link to="/login">Entre</Link>
+        </p>
       </form>
     </div>
   );

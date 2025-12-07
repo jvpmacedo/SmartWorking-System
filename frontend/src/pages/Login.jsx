@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "./Login.module.css";
 
@@ -42,6 +42,9 @@ const Login = () => {
           required
         />
         <button type="submit">Entrar</button>
+        <p className={styles.link}>
+          Não possui conta? <Link to="/signup">Cadastre-se</Link>
+        </p>
       </form>
     </div>
   );

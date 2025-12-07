@@ -20,6 +20,7 @@
   margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .form button {
@@ -35,4 +36,20 @@
 
 .form button:hover {
   background-color: #0056b3;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.checkboxContainer input {
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+.link {
+  text-align: center;
+  margin-top: 1rem;
 }
