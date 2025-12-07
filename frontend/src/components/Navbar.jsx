@@ -14,8 +14,10 @@ const Navbar = () => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.navLinks}>
-        <Link to="/">Dashboard</Link>
-        {user && <Link to="/admin">Admin</Link>}
+        <Link to="/">Home</Link>
+        <Link to="/dashboard">Dashboard</Link>
+        {user && user.email === "admin@email.com" && <Link to="/admin">Admin</Link>}
+        {user && <Link to="/perfil">Perfil</Link>}
       </div>
       <div>
         {user ? (

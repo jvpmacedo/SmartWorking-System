@@ -7,6 +7,7 @@ const Admin = () => {
   const [tipo, setTipo] = useState("Mesa");
   const [precoHora, setPrecoHora] = useState("");
   const [fotoBase64, setFotoBase64] = useState("");
+  const [endereco, setEndereco] = useState("");
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -27,6 +28,7 @@ const Admin = () => {
         tipo,
         precoHora: parseFloat(precoHora),
         fotoBase64,
+        endereco,
       });
       alert("Espaço cadastrado com sucesso!");
     } catch (error) {
@@ -43,6 +45,13 @@ const Admin = () => {
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           placeholder="Nome do Espaço"
+          required
+        />
+        <input
+          type="text"
+          value={endereco}
+          onChange={(e) => setEndereco(e.target.value)}
+          placeholder="Endereço"
           required
         />
         <select value={tipo} onChange={(e) => setTipo(e.target.value)}>

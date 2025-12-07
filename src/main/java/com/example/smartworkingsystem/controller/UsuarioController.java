@@ -22,15 +22,42 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> login(@RequestBody Usuario usuario) {
         Optional<Usuario> usuarioOptional = usuarios.stream()
                 .filter(u -> u.getEmail().equals(usuario.getEmail()) && u.getSenha().equals(usuario.getSenha()))
                 .findFirst();
 
         if (usuarioOptional.isPresent()) {
-            return new ResponseEntity<>("Login bem-sucedido!", HttpStatus.OK);
+            return new ResponseEntity<>(usuarioOptional.get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Email ou senha inválidos.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable int id, @RequestBody Usuario usuarioAtualizado) {
+        Optional<Usuario> usuarioOptional = usuarios.stream()
+                .filter(u -> u.getId() == id)
+                .findFirst();
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            usuario.setNome(usuarioAtualizado.getNome());
+            usuario.setEmail(usuarioAtualizado.getEmail());
+            usuario.setSenha(usuarioAtualizado.getSenha());
+            return new ResponseEntity<>(usuario, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarUsuario(@PathVariable int id) {
+        boolean removed = usuarios.removeIf(u -> u.getId() == id);
+        if (removed) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
