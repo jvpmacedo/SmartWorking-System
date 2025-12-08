@@ -9,12 +9,14 @@ public class Reserva {
     private LocalDateTime dataInicio;
     private LocalDateTime dataFim;
     private TipoReserva tipoReserva;
+    private int duracao; // Added duracao field
     private double valorTotal;
 
     public Reserva(Usuario usuario, Espaco espaco, LocalDateTime dataInicio, int duracao, TipoReserva tipoReserva) {
         this.usuario = usuario;
         this.espaco = espaco;
         this.dataInicio = dataInicio;
+        this.duracao = duracao; // Set duracao
         this.tipoReserva = tipoReserva;
 
         switch (tipoReserva) {
@@ -39,9 +41,11 @@ public class Reserva {
     public LocalDateTime getInicio() { return dataInicio; }
     public LocalDateTime getFim() { return dataFim; }
     public TipoReserva getTipoReserva() { return tipoReserva; }
+    public int getDuracao() { return duracao; } // Added getDuracao method
     public double getValorTotal() { return valorTotal; }
 
     public void setId(int id) { this.id = id; }
+    public void setDuracao(int duracao) { this.duracao = duracao; } // Added setDuracao method
 
     @Override
     public String toString() {
