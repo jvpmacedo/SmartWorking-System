@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className={styles.navLinks}>
         {!user && <Link to="/">Home</Link>}
         {user && <Link to="/dashboard">Dashboard</Link>}
-        {user && user.email === "admin@email.com" && <Link to="/admin">Admin</Link>}
+        {user && user.email === "admin@email.com" && <Link to="/admin">Registrar novo espaço</Link>}
         {user && <Link to="/perfil">Perfil</Link>}
         {user && user.email !== "admin@email.com" && <Link to="/minhas-reservas">Minhas Reservas</Link>}
       </div>

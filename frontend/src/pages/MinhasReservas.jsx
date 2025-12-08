@@ -49,7 +49,6 @@ const MinhasReservas = () => {
       <div className={styles.grid}>
         {reservas.map((reserva) => (
           <div key={reserva.id} className={styles.card}>
-            {reserva.espaco.fotoBase64 && <img src={reserva.espaco.fotoBase64} alt={reserva.espaco.nome} className={styles.image} />}
             <h3>{reserva.espaco.nome}</h3>
             <p>{reserva.espaco.endereco}</p>
             <p>ID da Reserva: {reserva.id}</p>

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../services/api";
 import styles from "./Pagamento.module.css";
+import { useError } from "../context/ErrorContext"; // Import useError
 
 const Pagamento = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { espaco, dataInicio, duracao, tipoReserva } = location.state || {};
   const [total, setTotal] = useState(0);
+  const { showError } = useError(); // Use the error context
 
   useEffect(() => {
     if (espaco) {
@@ -36,7 +38,7 @@ const Pagamento = () => {
       alert("Reserva Confirmada com Sucesso!");
       navigate("/dashboard");
     } catch (error) {
-      alert("Erro ao confirmar a reserva.");
+      showError(error); // Display the error message using the modal
     }
   };
 
