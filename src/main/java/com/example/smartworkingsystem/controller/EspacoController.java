@@ -14,6 +14,7 @@ import java.util.List;
 public class EspacoController {
 
     public static List<Espaco> espacos = new ArrayList<>();
+    private static int nextEspacoId = 1; // Start IDs from 1 for new spaces
 
     @GetMapping
     public ResponseEntity<List<Espaco>> listarEspacos() {
@@ -22,9 +23,8 @@ public class EspacoController {
 
     @PostMapping
     public ResponseEntity<Espaco> cadastrarEspaco(@RequestBody Espaco espaco) {
-        // Simple authorization check (in a real app, use Spring Security)
-        // For now, let's assume any logged in user can add spaces.
-        // A better check would be to verify the user is an admin.
+        // Assign a unique ID to the new space
+        espaco.setId(nextEspacoId++);
         espacos.add(espaco);
         return new ResponseEntity<>(espaco, HttpStatus.CREATED);
     }

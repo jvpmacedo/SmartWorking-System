@@ -33,14 +33,23 @@ const MinhasReservas = () => {
   };
 
   const calcularTotal = (reserva) => {
+    if (!reserva || !reserva.espaco) return 0; // Ensure reserva and espaco exist
+
+    const duracao = Number(reserva.duracao);
+    if (isNaN(duracao) || duracao <= 0) return 0; // Handle invalid or non-positive duration
+
+    let preco = 0;
     if (reserva.tipoReserva === "HORA") {
-      return reserva.espaco.precoHora * reserva.duracao;
+      preco = Number(reserva.espaco.precoHora);
     } else if (reserva.tipoReserva === "DIARIA") {
-      return reserva.espaco.precoDiaria * reserva.duracao;
+      preco = Number(reserva.espaco.precoDiaria);
     } else if (reserva.tipoReserva === "MENSAL") {
-      return reserva.espaco.precoMensal * reserva.duracao;
+      preco = Number(reserva.espaco.precoMensal);
     }
-    return 0;
+    
+    if (isNaN(preco) || preco < 0) return 0; // Handle invalid or negative price
+
+    return preco * duracao;
   }
 
   return (

@@ -24,6 +24,7 @@ public class Espaco {
     }
 
     public int getId() { return id; }
+    public void setId(int id) { this.id = id; } // Added setId method
     public String getNome() { return nome; }
     public double getPrecoHora() { return precoHora; }
     public double getPrecoDiaria() { return precoDiaria; }
